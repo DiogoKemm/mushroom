@@ -1,12 +1,15 @@
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 import graphviz
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDisplay
+from sklearn.tree import export_graphviz
 
-data = pd.read_csv('mushrooms.csv')
+data = pd.read_csv('mushroom/mushrooms.csv')
+data = data.iloc[:, [0, 22]]
 
 categorical_columns = data.select_dtypes(include=['object']).columns.tolist()
 encoder = OneHotEncoder(sparse_output=False)
@@ -22,16 +25,33 @@ y = df_encoded['class_p']
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3)
 
-
 clf = DecisionTreeClassifier()
 clf = clf.fit(x_train, y_train)
-dot_data = graphviz(clf, out_file=None, 
+dot_data = export_graphviz(clf, out_file='ah', 
 feature_names=x.columns, 
 filled=True, rounded=True, 
 special_characters=True)
 graph = graphviz.Source(dot_data)
-graph
-#y_pred = clf.predict(x_test)
-#print("Acurácia: ", accuracy_score(y_test, y_pred))
+features_list = x.columns.values
+feature_importance = clf.feature_importances_
+sorted_idx = np.argsort(feature_importance)
+plt.figure(figsize=(8,7))
+plt.barh(range(len(sorted_idx)), feature_importance[sorted_idx], align='center', color ="red")
+plt.yticks(range(len(sorted_idx)), features_list[sorted_idx])
+plt.xlabel('Importance')
+plt.title('Feature importance')
+plt.draw()
+plt.savefig("featureimp.png", format='png', dpi=500, bbox_inches='tight')
+#plt.show()
+
+y_pred_dt = clf.predict(x_test)
+print("Accuracy: ", round(accuracy_score(y_test, y_pred_dt), 4), "%")
+
+cm = confusion_matrix(y_test, y_pred_dt, labels=clf.classes_)
+
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=clf.classes_)
+
+disp.plot()
+plt.show()
 
 
