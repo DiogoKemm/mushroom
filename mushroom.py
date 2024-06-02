@@ -9,7 +9,7 @@ from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDis
 from sklearn.tree import export_graphviz
 
 data = pd.read_csv('mushroom/mushrooms.csv')
-data = data.iloc[:, [0, 22]]
+data = data.iloc[:, [0, 21, 22]]
 
 categorical_columns = data.select_dtypes(include=['object']).columns.tolist()
 encoder = OneHotEncoder(sparse_output=False)
@@ -52,6 +52,5 @@ cm = confusion_matrix(y_test, y_pred_dt, labels=clf.classes_)
 disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=clf.classes_)
 
 disp.plot()
-plt.show()
-
+disp.figure_.savefig('confusion_matrix.png')
 
