@@ -39,10 +39,10 @@ sorted_idx = np.argsort(feature_importance)
 plt.figure(figsize=(8,7))
 plt.barh(range(len(sorted_idx)), feature_importance[sorted_idx], align='center', color ="red")
 plt.yticks(range(len(sorted_idx)), features_list[sorted_idx])
-plt.xlabel('Importance')
-plt.title('Feature importance')
+plt.xlabel('Importância')
+plt.title('Importância dos atributos')
 plt.draw()
-plt.savefig("featureimp.png", format='png', dpi=500, bbox_inches='tight')
+plt.savefig("atributoimp.png", format='png', dpi=500, bbox_inches='tight')
 
 # Previsão e acurácia
 y_pred_dt = clf.predict(x_test)
