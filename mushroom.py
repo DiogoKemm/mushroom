@@ -19,10 +19,10 @@ one_hot_encoded = encoder.fit_transform(data[categorical_columns])
 one_hot_df = pd.DataFrame(one_hot_encoded, columns=encoder.get_feature_names_out(categorical_columns))
 df_encoded = pd.concat([data, one_hot_df], axis=1)
 df_encoded = df_encoded.drop(categorical_columns, axis=1)
-x = df_encoded.drop(['class_p', 'class_e'], axis=1)
-y = df_encoded['class_p']
 
 # Separação de treino e teste
+x = df_encoded.drop(['class_p', 'class_e'], axis=1)
+y = df_encoded['class_p']
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3)
 
 # Árvore de decisão
