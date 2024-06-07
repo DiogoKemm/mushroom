@@ -8,8 +8,10 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDisplay
 from sklearn.tree import export_graphviz
 
+
 # Lê a tabela
-data = pd.read_csv('mushrooms.csv')
+data = pd.read_csv('mushroom/mushrooms.csv')
+data = data.drop(["veil-type"], axis=1)
 #data = data.iloc[:, [0, 5]]
 
 # OneHotEncoder
@@ -22,7 +24,7 @@ df_encoded = df_encoded.drop(categorical_columns, axis=1)
 
 # Separação de treino e teste
 x = df_encoded.drop(['class_p', 'class_e'], axis=1)
-y = df_encoded['class_p']
+y = df_encoded['class_e']
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3)
 
 # Árvore de decisão
@@ -32,20 +34,22 @@ dot_data = export_graphviz(clf, out_file='ah', feature_names=x.columns, filled=T
                            special_characters=True)
 graph = graphviz.Source(dot_data)
 
-# Importância dos atributos
+# Influência dos atributos no modelo
 features_list = x.columns.values
 feature_importance = clf.feature_importances_
 sorted_idx = np.argsort(feature_importance)
 plt.figure(figsize=(8,7))
 plt.barh(range(len(sorted_idx)), feature_importance[sorted_idx], align='center', color ="red")
 plt.yticks(range(len(sorted_idx)), features_list[sorted_idx])
-plt.xlabel('Importância')
-plt.title('Importância dos atributos')
+plt.xlabel('Influência')
+plt.title('Influência dos atributos')
 plt.draw()
-plt.savefig("atributoimp.png", format='png', dpi=500, bbox_inches='tight')
+plt.savefig("atributoinf.png", format='png', dpi=500, bbox_inches='tight')
 
 # Previsão e acurácia
 y_pred_dt = clf.predict(x_test)
+print(x_test)
+print(y_pred_dt)
 print("Accuracy: ", round(accuracy_score(y_test, y_pred_dt), 4), "%")
 
 # Matriz de confusão
