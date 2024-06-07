@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDisplay
-from sklearn.tree import export_graphviz
+from sklearn.tree import plot_tree
 
 
 # Lê a tabela
@@ -30,9 +30,8 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3)
 # Árvore de decisão
 clf = DecisionTreeClassifier()
 clf = clf.fit(x_train, y_train)
-dot_data = export_graphviz(clf, out_file='ah', feature_names=x.columns, filled=True, rounded=True, 
-                           special_characters=True)
-graph = graphviz.Source(dot_data)
+plot_tree(clf)
+plt.show()
 
 # Influência dos atributos no modelo
 features_list = x.columns.values
@@ -48,8 +47,6 @@ plt.savefig("atributoinf.png", format='png', dpi=500, bbox_inches='tight')
 
 # Previsão e acurácia
 y_pred_dt = clf.predict(x_test)
-print(x_test)
-print(y_pred_dt)
 print("Accuracy: ", round(accuracy_score(y_test, y_pred_dt), 4), "%")
 
 # Matriz de confusão
