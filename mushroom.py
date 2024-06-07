@@ -31,20 +31,9 @@ plt.figure(figsize=(12, 12))
 plot_tree(clf, feature_names=df_encoded.columns, fontsize=5)
 plt.show()
 
-# Influência dos atributos no modelo
-features_list = x.columns.values
-feature_importance = clf.feature_importances_
-sorted_idx = np.argsort(feature_importance)
-plt.figure(figsize=(8,7))
-plt.barh(range(len(sorted_idx)), feature_importance[sorted_idx], align='center', color ="red")
-plt.yticks(range(len(sorted_idx)), features_list[sorted_idx])
-plt.xlabel('Influência')
-plt.title('Influência dos atributos')
-plt.draw()
-plt.savefig("atributoinf.png", format='png', dpi=500, bbox_inches='tight')
-
 # Previsão e acurácia - 0: comestível - 1: venenoso
 y_pred_dt = clf.predict(x_test)
+print(y_pred_dt)
 print("Accuracy: ", round(accuracy_score(y_test, y_pred_dt), 4), "%")
 
 # Matriz de confusão
