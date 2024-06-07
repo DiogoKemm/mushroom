@@ -30,7 +30,8 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3)
 # Árvore de decisão
 clf = DecisionTreeClassifier()
 clf = clf.fit(x_train, y_train)
-plot_tree(clf)
+plt.figure(figsize=(12, 12))
+plot_tree(clf, feature_names=df_encoded.columns, fontsize=5)
 plt.show()
 
 # Influência dos atributos no modelo
