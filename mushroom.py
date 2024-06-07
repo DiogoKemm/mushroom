@@ -1,18 +1,15 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import graphviz
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDisplay
 from sklearn.tree import plot_tree
 
-
 # Lê a tabela
-data = pd.read_csv('mushroom/mushrooms.csv')
+data = pd.read_csv('mushrooms.csv')
 data = data.drop(["veil-type"], axis=1)
-#data = data.iloc[:, [0, 5]]
 
 # OneHotEncoder
 categorical_columns = data.select_dtypes(include=['object']).columns.tolist()
@@ -46,13 +43,13 @@ plt.title('Influência dos atributos')
 plt.draw()
 plt.savefig("atributoinf.png", format='png', dpi=500, bbox_inches='tight')
 
-# Previsão e acurácia
+# Previsão e acurácia - 0: comestível - 1: venenoso
 y_pred_dt = clf.predict(x_test)
 print("Accuracy: ", round(accuracy_score(y_test, y_pred_dt), 4), "%")
 
 # Matriz de confusão
-cm = confusion_matrix(y_test, y_pred_dt, labels=clf.classes_)
-disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=clf.classes_)
+cm = confusion_matrix(y_test, y_pred_dt)
+disp = ConfusionMatrixDisplay(confusion_matrix=cm)
 disp.plot()
 disp.figure_.savefig('confusion_matrix.png')
 
